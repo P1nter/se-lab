@@ -17,7 +17,7 @@ public class GT4500 implements SpaceShip {
 
   public boolean fireLaser(FiringMode firingMode) {
     // TODO not implemented yet
-    return false;
+    return true;
   }
 
   /**
@@ -77,6 +77,23 @@ public class GT4500 implements SpaceShip {
         break;
 
       case ALL:
+        if (wasPrimaryFiredLast) {
+          // try to fire the secondary first
+          if (! secondaryTorpedoStore.isEmpty()) {
+            firingSuccess = secondaryTorpedoStore.fire(10);
+            wasPrimaryFiredLast = false;
+          }
+          else {
+            // although primary was fired last time, but the secondary is empty
+            // thus try to fire primary again
+            if (! primaryTorpedoStore.isEmpty()) {
+              firingSuccess = primaryTorpedoStore.fire(10);
+              wasPrimaryFiredLast = true;
+            }
+
+            // if both of the stores are empty, nothing can be done, return failure
+          }
+        }
         // try to fire both of the torpedo stores
         //TODO implement feature
 
